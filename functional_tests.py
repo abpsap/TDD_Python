@@ -20,11 +20,11 @@ class NewVisitortest(unittest.TestCase):
         # She notices the page title and header mention to-do lists
         self.assertIn("Match Making", self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.asertIn('Match Making', header_text)
+        self.assertIn('Your Profile', header_text)
 
         # She is invited to enter her profile item straight away
         inputbox = self.browser.find_element_by_id('id_new_profile')
-        self.assertEqual(inputbox.get_attribite('placeholder'),
+        self.assertEqual(inputbox.get_attribute('placeholder'),
                          'Enter your profile info'
         )
 
@@ -38,7 +38,8 @@ class NewVisitortest(unittest.TestCase):
         table = self.browser.find_element_by_id('id_profile_table')
         rows = table.find_elements_by_tag_name('tr')
         self.assertTrue(
-            any(row.text == 'I am a female looking for a match' for row in rows)
+            any(row.text == 'I am a female looking for a match' for row in rows),
+            "No new profile was entered"
         )
         # There is still a text box inviting her to add another item
         self.fail('Finish the test!')
