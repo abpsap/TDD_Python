@@ -2,6 +2,7 @@ from django.core.urlresolvers import resolve
 from django.test import TestCase
 from todo_list.views import home_page
 from django.http import HttpRequest
+from django.template.loader import render_to_string
 
 # Create your tests here.
 class HomePageTest(TestCase):
@@ -18,6 +19,6 @@ class HomePageTest(TestCase):
             print ("ERROR:  Error in your request message")
 
         response = home_page(request)
-        self.assertTrue(response.content.startswith(b'<html>'))
-        self.assertIn(b'<title>To-Do lists</title>', response.content)
-        self.assertTrue(response.content.endswith(b'</html>'))
+        print (repr(response.content.strip()))
+        expected_html = render_to_string('home.html')
+        self.assertTrue(expected_html, response.content.strip().decode)
