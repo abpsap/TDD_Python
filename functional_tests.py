@@ -12,8 +12,14 @@ class NewVisitortest(unittest.TestCase):
         self.browser.quit()
         return
 
+    def check_for_row_in_profile_table(self, row_text):
+        table = self.browser.find_element_by_id('id_profile_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
+
     def test_can_start_a_list_and_retrieve_it_later(self):
-        # Edith has head about a cool new online to-do app. She goes
+        # Edith has head about a cool new online Match Making app. She goes
         # to check out its homepage
         self.browser.get('http://localhost:8000')
 
@@ -29,22 +35,25 @@ class NewVisitortest(unittest.TestCase):
         )
 
         # She types "But peacock feathers" into a text box
-        inputbox.send_keys('I am a female looking for a match')
+        inputbox.send_keys('I am looking for a match')
 
         # When she hits enter , the page updates and now the page lists
         # "1: Buy peacock feathers' as an item in a to-do list
         inputbox.send_keys(Keys.ENTER)
+        self.check_for_row_in_profile_table('I am looking for a match')
 
-        table = self.browser.find_element_by_id('id_profile_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == 'I am a female looking for a match' for row in rows),
-            "No new profile was entered"
-        )
+        import time
+        time.sleep(10)
+
         # There is still a text box inviting her to add another item
-        self.fail('Finish the test!')
+        inputbox = self.browser.find_element_by_id('id_new_profile')
+        inputbox.send_keys('Preferred age[25-30], Hobby[Reading], Personality[Humor], Height[6.2]')
+        inputbox.send_keys(Keys.ENTER)
 
         # The page updates again and now shows both items on her list
+        self.check_for_row_in_profile_table('I am looking for a match')
+        self.check_for_row_in_profile_table('Preferred age[25-30], Hobby[Reading], Personality[Humor], Height[6.2]')
+
         # Edith navigates to another page and comes back to see if her to-do still exists and it does
         # She logs out.
 

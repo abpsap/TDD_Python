@@ -21,4 +21,20 @@ class HomePageTest(TestCase):
         response = home_page(request)
         print (repr(response.content.strip()))
         expected_html = render_to_string('home.html')
-        self.assertTrue(expected_html, response.content.strip().decode)
+        self.assertTrue(expected_html, response.content.strip().decode())
+
+    def test_home_page_can_save_a_POST_request(self):
+        try:
+            request = HttpRequest()
+        except NameError:
+            print ("ERROR:  Error in your request message")
+
+        request.method = 'POST'
+        request.POST['item_text'] = 'A new user profile'
+        response = home_page(request)
+        self.assertTrue('A new user profile', response.content.strip().decode())
+
+        expected_html = render_to_string(
+            'home.html',
+        {'new_item_text': 'A new user profile'}
+        )

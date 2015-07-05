@@ -5,9 +5,12 @@
     </head>
     <body>
         <h1> Your Profile</h1>
-        <input id="id_new_profile"  placeholder="Enter your profile info" />
+        <form method="POST">
+            <input name = "item_text" id="id_new_profile"  placeholder="Enter your profile info" />
+            {% csrf_token %}
+        </form>
         <table id="id_profile_table">
-
+            <tr><td>{{ new_item_text }}</td></tr>
         </table>
 
     </body>
