@@ -16,6 +16,8 @@ class NewVisitortest(LiveServerTestCase):
     def check_for_row_in_profile_table(self, row_text):
         table = self.browser.find_element_by_id('id_profile_table')
         rows = table.find_elements_by_tag_name('tr')
+#        print (row_text)
+#        [print (row.text) for row in rows]
         self.assertIn(row_text, [row.text for row in rows])
 
 
@@ -47,7 +49,7 @@ class NewVisitortest(LiveServerTestCase):
         self.check_for_row_in_profile_table('Looking for a male soulmate')
 
         import time
-        time.sleep(10)
+        time.sleep(5)
 
         # There is still a text box inviting her to add another item
         inputbox = self.browser.find_element_by_id('id_new_profile')
@@ -61,7 +63,8 @@ class NewVisitortest(LiveServerTestCase):
         self.check_for_row_in_profile_table('Preferred age:25-30, Hobby:Reading, Personality:Humor, Height:6.2')
 
         #Now a new user person2 comes along to the site
-
+        time.sleep(5)
+        
         ##We need a new browser session to make sure that no information
         ## is coming thro from cookies etc
         self.browser.quit()
@@ -73,11 +76,15 @@ class NewVisitortest(LiveServerTestCase):
         self.assertNotIn('Looking for a male soulmate', page_text)
         self.assertNotIn('Preferred age:25-30', page_text)
 
+        time.sleep(5)
+
         # Person2 starts a new profile by entering a new item, He
         # is less interesting
         inputbox = self.browser.find_element_by_id('id_new_profile')
         inputbox.send_keys('Frank: Looking for a female soulmate')
         inputbox.send_keys(Keys.ENTER)
+
+        time.sleep(5)
 
         # person2 gets his own unique URL
         person2_profile_url = self.browser.current_url
@@ -89,7 +96,7 @@ class NewVisitortest(LiveServerTestCase):
         self.assertNotIn('Looking for a male soulmate', page_text)
         self.assertIn('Frank: Looking for a female soulmate', page_text)
 
-
+        time.sleep(5)
 
 
 

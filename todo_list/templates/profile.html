@@ -4,13 +4,14 @@
     </head>
     <body>
         <h1> Enter Your New Profile</h1>
-        <form method="POST" action="/">
+        <form method="POST" action="/todo_list/{{ profile.id }}/add_item">
             <input name = "item_text" id="id_new_profile"  placeholder="Enter your profile info" />
             {% csrf_token %}
         </form>
         <table id="id_profile_table">
-            {% for item in items %}
+            {% for item in profile.item_set.all %}
 <!--                <tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>  -->
+<!--                <tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>   -->
                 <tr><td>{{ item.text }}</td></tr>
             {% endfor %}
         </table>

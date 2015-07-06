@@ -18,10 +18,13 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
 urlpatterns = patterns('',
+        # Examples:
+        url(r'^(\d+)/$', 'todo_list.views.view_profile', name='view_profile'),
+        url(r'^(\d+)/add_item$', 'todo_list.views.add_item', name='add_item'),
+        url(r'^new$', 'todo_list.views.new_profile', name='new_profile'),
+#        url(r'^todo_list/(.+)/$', 'todo_list.views.view_profile', name='view_profile'),
 
-        url(r'^$', 'todo_list.views.home_page', name='home'),
-        url(r'^todo_list/', include('todo_list.urls')),
-#        url(r'^todo_list/(\d+)/$', 'todo_list.views.view_profile', name='view_profile'),
-#        url(r'^todo_list/(\d+)/add_item$', 'todo_list.views.add_item', name='add_item'),
-#        url(r'^todo_list/new$', 'todo_list.views.new_profile', name='new_profile'),
+
+        # url(r'^blog/', include('blog.urls')),
+        # url(r'^admin/', include(admin.site.urls)),
 )
