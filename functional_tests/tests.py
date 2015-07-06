@@ -1,9 +1,10 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import unittest
+#import unittest
 
-class NewVisitortest(unittest.TestCase):
-
+#class NewVisitortest(unittest.TestCase):
+class NewVisitortest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(5)
@@ -21,7 +22,7 @@ class NewVisitortest(unittest.TestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Edith has head about a cool new online Match Making app. She goes
         # to check out its homepage
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # She notices the page title and header mention to-do lists
         self.assertIn("Match Making", self.browser.title)
@@ -47,12 +48,14 @@ class NewVisitortest(unittest.TestCase):
 
         # There is still a text box inviting her to add another item
         inputbox = self.browser.find_element_by_id('id_new_profile')
-        inputbox.send_keys('Preferred age[25-30], Hobby[Reading], Personality[Humor], Height[6.2]')
+        inputbox.send_keys('Preferred age:25-30, Hobby:Reading, Personality:Humor, Height:6.2')
         inputbox.send_keys(Keys.ENTER)
+
+        time.sleep(5)
 
         # The page updates again and now shows both items on her list
         self.check_for_row_in_profile_table('I am looking for a match')
-        self.check_for_row_in_profile_table('Preferred age[25-30], Hobby[Reading], Personality[Humor], Height[6.2]')
+        self.check_for_row_in_profile_table('Preferred age:25-30, Hobby:Reading, Personality:Humor, Height:6.2')
 
         # Edith navigates to another page and comes back to see if her to-do still exists and it does
         # She logs out.
