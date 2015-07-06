@@ -20,7 +20,7 @@ from django.contrib import admin
 urlpatterns = patterns('',
         # Examples:
         url(r'^$', 'todo_list.views.home_page', name='home'),
+        url(r'^todo_list/the-only-profile-in-the-world/$', 'todo_list.views.view_list', name='view_list'),
         # url(r'^blog/', include('blog.urls')),
-
         # url(r'^admin/', include(admin.site.urls)),
 )

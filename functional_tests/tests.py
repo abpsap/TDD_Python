@@ -36,12 +36,15 @@ class NewVisitortest(LiveServerTestCase):
         )
 
         # She types "But peacock feathers" into a text box
-        inputbox.send_keys('I am looking for a match')
+        inputbox.send_keys('Looking for a male soulmate')
 
-        # When she hits enter , the page updates and now the page lists
+        # When she hits enter , she will be taken to a new URL and now the page lists
         # "1: Buy peacock feathers' as an item in a to-do list
         inputbox.send_keys(Keys.ENTER)
-        self.check_for_row_in_profile_table('I am looking for a match')
+        person1_profile_url = self.browser.current_url
+        self.assertRegex(person1_profile_url, '/todo_list/.+')
+
+        self.check_for_row_in_profile_table('Looking for a male soulmate')
 
         import time
         time.sleep(10)
@@ -54,11 +57,40 @@ class NewVisitortest(LiveServerTestCase):
         time.sleep(5)
 
         # The page updates again and now shows both items on her list
-        self.check_for_row_in_profile_table('I am looking for a match')
+        self.check_for_row_in_profile_table('Looking for a male soulmate')
         self.check_for_row_in_profile_table('Preferred age:25-30, Hobby:Reading, Personality:Humor, Height:6.2')
 
-        # Edith navigates to another page and comes back to see if her to-do still exists and it does
-        # She logs out.
+        #Now a new user person2 comes along to the site
+
+        ##We need a new browser session to make sure that no information
+        ## is coming thro from cookies etc
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        # Person2 visits the home page and there is no trace of person1's info
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Looking for a male soulmate', page_text)
+        self.assertNotIn('Preferred age:25-30', page_text)
+
+        # Person2 starts a new profile by entering a new item, He
+        # is less interesting
+        inputbox = self.browser.find_element_by_id('id_new_profile')
+        inputbox.send_keys('Frank: Looking for a female soulmate')
+        inputbox.send_keys(Keys.ENTER)
+
+        # person2 gets his own unique URL
+        person2_profile_url = self.browser.current_url
+        self.assertRegex(person2_profile_url, '/todo_list/.+')
+        self.assertNotEqual(person2_profile_url, person1_profile_url)
+
+        # Again there is no trace of person1 profile on person2's page
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Looking for a male soulmate', page_text)
+        self.assertIn('Frank: Looking for a female soulmate', page_text)
+
+
+
 
 
 if (__name__) == "__main__":
